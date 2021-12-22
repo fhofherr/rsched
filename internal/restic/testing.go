@@ -91,3 +91,19 @@ func (r *TestCmdRunner) AssertComplete() {
 		r.T.Errorf("Expected restic to be called %d times; was only called %d times", len(r.Invocations), r.pos)
 	}
 }
+
+// AssertSchedulerHasSingleJob asserts that Scheduler has exactly one job.
+func AssertSchedulerHasSingleJob(t *testing.T, s *Scheduler) bool {
+	t.Helper()
+
+	nEntries := len(s.cron.Entries())
+	if nEntries == 0 {
+		t.Error("No cron entries")
+		return false
+	}
+	if nEntries > 1 {
+		t.Error("More than one cron entry")
+		return false
+	}
+	return true
+}
