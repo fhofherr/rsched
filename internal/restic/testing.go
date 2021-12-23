@@ -5,6 +5,7 @@ import (
 	"os/exec"
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -106,4 +107,27 @@ func AssertSchedulerHasSingleJob(t *testing.T, s *Scheduler) bool {
 		return false
 	}
 	return true
+}
+
+// MatchOptions returns a matcher for restic options.
+//
+// The t argument is used for logging only and does not influence the test.
+func MatchOptions(t *testing.T, expected ...Option) interface{} {
+	return func(actual []Option) bool {
+		var e, a options
+
+		if err := e.Apply(expected); err != nil {
+			t.Logf("Error applying expected options: %v", err)
+			return false
+		}
+		if err := a.Apply(actual); err != nil {
+			t.Logf("Error applying actual options: %v", err)
+			return false
+		}
+		if ok := cmp.Equal(e, a); !ok {
+			t.Logf("Actual options did not match expected options:\n%s", cmp.Diff(e, a))
+			return false
+		}
+		return true
+	}
 }

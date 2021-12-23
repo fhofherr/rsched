@@ -6,17 +6,18 @@ import (
 	"strings"
 )
 
+// Names of restic environment variables rsched needs to keep track of.
 const (
-	envResticRepository      = "RESTIC_REPOSITORY"
-	envResticRepositoryFile  = "RESTIC_REPOSITORY_FILE"
-	envResticPassword        = "RESTIC_PASSWORD"
-	envResticPasswordFile    = "RESTIC_PASSWORD_FILE"
-	envResticPasswordCommand = "RESTIC_PASSWORD_COMMAND"
+	EnvResticRepository      = "RESTIC_REPOSITORY"
+	EnvResticRepositoryFile  = "RESTIC_REPOSITORY_FILE"
+	EnvResticPassword        = "RESTIC_PASSWORD"
+	EnvResticPasswordFile    = "RESTIC_PASSWORD_FILE"
+	EnvResticPasswordCommand = "RESTIC_PASSWORD_COMMAND"
 )
 
 var requiredEnvVars = [][]string{
-	{envResticRepository, envResticRepositoryFile},
-	{envResticPassword, envResticPasswordFile, envResticPasswordCommand},
+	{EnvResticRepository, EnvResticRepositoryFile},
+	{EnvResticPassword, EnvResticPasswordFile, EnvResticPasswordCommand},
 }
 
 // Option is the type of any option accepted by the restic packages public
@@ -74,13 +75,13 @@ func WithEnv(env map[string]string) Option {
 // WithPassword adds the RESTIC_PASSWORD environment variable to the restic
 // environment.
 func WithPassword(pw string) Option {
-	return WithEnv(map[string]string{envResticPassword: pw})
+	return WithEnv(map[string]string{EnvResticPassword: pw})
 }
 
 // WithRepository adds the RESTIC_REPOSITORY environment variable to the
 // restic environment.
 func WithRepository(repo string) Option {
-	return WithEnv(map[string]string{envResticRepository: repo})
+	return WithEnv(map[string]string{EnvResticRepository: repo})
 }
 
 // WithCmdRunner allows to use a specialized command runner.

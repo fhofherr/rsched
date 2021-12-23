@@ -19,7 +19,7 @@ func TestOptions_Apply(t *testing.T) {
 		{
 			name: "RESTIC_REPOSITORY_FILE and RESTIC_PASSWORD present",
 			options: []Option{
-				WithEnv(map[string]string{envResticRepositoryFile: "/path/to/some/file"}),
+				WithEnv(map[string]string{EnvResticRepositoryFile: "/path/to/some/file"}),
 				WithPassword("some password"),
 			},
 		},
@@ -27,14 +27,14 @@ func TestOptions_Apply(t *testing.T) {
 			name: "RESTIC_REPOSITORY and RESTIC_PASSWORD_FILE present",
 			options: []Option{
 				WithRepository("/some/repo"),
-				WithEnv(map[string]string{envResticPasswordFile: "/path/to/some/file"}),
+				WithEnv(map[string]string{EnvResticPasswordFile: "/path/to/some/file"}),
 			},
 		},
 		{
 			name: "RESTIC_REPOSITORY and RESTIC_PASSWORD_COMMAND present",
 			options: []Option{
 				WithRepository("/some/repo"),
-				WithEnv(map[string]string{envResticPasswordCommand: "/path/to/some/command"}),
+				WithEnv(map[string]string{EnvResticPasswordCommand: "/path/to/some/command"}),
 			},
 		},
 		{

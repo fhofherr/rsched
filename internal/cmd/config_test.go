@@ -11,15 +11,40 @@ import (
 // correctly.
 func TestLoadConfig(t *testing.T) {
 	tests := []struct {
-		name        string
-		args        []string
-		expectedCfg cmd.Config
-		assertErr   assert.ErrorAssertionFunc
+		name      string
+		args      []string
+		assertCfg func(t *testing.T, actual cmd.Config)
+		assertErr assert.ErrorAssertionFunc
 	}{
 		{
 			name: "Default config",
-			expectedCfg: cmd.Config{
-				BackupSchedule: "@hourly",
+			assertCfg: func(t *testing.T, actual cmd.Config) {
+				expected := cmd.Config{
+					BackupSchedule: "@hourly",
+					BackupPath:     "/",
+				}
+				assert.Equal(t, expected, actual)
+			},
+		},
+		{
+			name: "Pass backup path",
+			args: []string{"-restic-backup-path", "/path/to/backup"},
+			assertCfg: func(t *testing.T, actual cmd.Config) {
+				assert.Equal(t, "/path/to/backup", actual.BackupPath)
+			},
+		},
+		{
+			name: "Pass password file",
+			args: []string{"-restic-password-file", "/path/to/password/file"},
+			assertCfg: func(t *testing.T, actual cmd.Config) {
+				assert.Equal(t, "/path/to/password/file", actual.ResticPasswordFile)
+			},
+		},
+		{
+			name: "Pass restic repository",
+			args: []string{"-restic-repository", "/path/to/restic/repository"},
+			assertCfg: func(t *testing.T, actual cmd.Config) {
+				assert.Equal(t, "/path/to/restic/repository", actual.ResticRepository)
 			},
 		},
 	}
@@ -32,7 +57,7 @@ func TestLoadConfig(t *testing.T) {
 			}
 			cfg, err := cmd.LoadConfig(tt.args)
 			tt.assertErr(t, err)
-			assert.Equal(t, tt.expectedCfg, cfg)
+			tt.assertCfg(t, cfg)
 		})
 	}
 }
