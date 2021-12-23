@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os/exec"
+	"strings"
 )
 
 // CmdRunner defines the Run method which allows to run an external command.
@@ -21,13 +22,18 @@ type CmdRunner interface {
 type osRunner struct{}
 
 func (r *osRunner) Run(cmd *exec.Cmd) error {
-	var exitErr *exec.ExitError
+	var (
+		exitErr *exec.ExitError
+		stderr  strings.Builder
+	)
+
+	cmd.Stderr = &stderr
 
 	err := cmd.Run()
 	if errors.As(err, &exitErr) {
 		return Error{
 			ExitCode: exitErr.ExitCode(),
-			Err:      exitErr,
+			Stderr:   stderr.String(),
 		}
 	}
 	return err

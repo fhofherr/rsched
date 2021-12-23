@@ -47,6 +47,13 @@ func TestLoadConfig(t *testing.T) {
 				assert.Equal(t, "/path/to/restic/repository", actual.ResticRepository)
 			},
 		},
+		{
+			name: "Pass restic binary",
+			args: []string{"-restic-binary", "/path/to/restic"},
+			assertCfg: func(t *testing.T, actual cmd.Config) {
+				assert.Equal(t, "/path/to/restic", actual.ResticBinary)
+			},
+		},
 	}
 
 	for _, tt := range tests {

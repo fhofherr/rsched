@@ -22,3 +22,13 @@ func (m *MockResticScheduler) ScheduleBackup(schedule, path string, os ...restic
 	args := m.Called(schedule, path, os)
 	return args.Error(0)
 }
+
+// Run registers a call to itself.
+func (m *MockResticScheduler) Run() {
+	m.Called()
+}
+
+// Shutdown registers a call to itself.
+func (m *MockResticScheduler) Shutdown() {
+	m.Called()
+}

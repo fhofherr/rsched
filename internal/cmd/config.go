@@ -14,6 +14,7 @@ type Config struct {
 	BackupSchedule     string
 	ResticPasswordFile string
 	ResticRepository   string
+	ResticBinary       string
 }
 
 // LoadConfig loads a new Config from the environment and command line flags.
@@ -44,6 +45,8 @@ See the restic documentation for valid values
 The value of this flag is ignored if the RESTIC_REPOSITORY environment
 variable is set.
 `)
+
+	fs.StringVar(&cfg.ResticBinary, "restic-binary", "", "Path to the restic binary")
 
 	err := ff.Parse(fs, args, ff.WithEnvVarPrefix("RSCHED_"))
 	if err != nil {

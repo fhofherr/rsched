@@ -26,6 +26,7 @@ func TestRSched_Run(t *testing.T) {
 				BackupSchedule:     "@hourly",
 				ResticPasswordFile: "/path/to/password-file",
 				ResticRepository:   "/path/to/repository",
+				ResticBinary:       "/path/to/restic",
 			},
 			mock: func(t *testing.T, tt *testCase) {
 				env := cmd.Environ()
@@ -38,9 +39,14 @@ func TestRSched_Run(t *testing.T) {
 						tt.cfg.BackupSchedule,
 						tt.cfg.BackupPath,
 						mock.MatchedBy(
-							restic.MatchOptions(t, restic.WithEnv(env)),
+							restic.MatchOptions(
+								t,
+								restic.WithEnv(env),
+								restic.WithBinary(tt.cfg.ResticBinary),
+							),
 						),
 					).Return(nil)
+				tt.Scheduler.On("Run").Return()
 			},
 		},
 	}

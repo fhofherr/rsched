@@ -24,15 +24,21 @@ func (r *RSched) Run(cfg Config) {
 	if cfg.BackupSchedule != "" {
 		r.scheduleBackup(cfg, env)
 	}
+	r.Scheduler.Run()
 }
 
 // Shutdown performs a graceful shutdown of rsched.
 func (r *RSched) Shutdown() {
-	panic("not implemented")
+	r.Scheduler.Shutdown()
 }
 
 func (r *RSched) scheduleBackup(cfg Config, env map[string]string) {
-	err := r.Scheduler.ScheduleBackup(cfg.BackupSchedule, cfg.BackupPath, restic.WithEnv(env))
+	opts := []restic.Option{restic.WithEnv(env)}
+	if cfg.ResticBinary != "" {
+		opts = append(opts, restic.WithBinary(cfg.ResticBinary))
+	}
+
+	err := r.Scheduler.ScheduleBackup(cfg.BackupSchedule, cfg.BackupPath, opts...)
 	if err != nil {
 		log.Printf("Failed to schedule backup: %v", err)
 	}
@@ -41,4 +47,6 @@ func (r *RSched) scheduleBackup(cfg Config, env map[string]string) {
 // ResticScheduler represents the actual restic scheduler.
 type ResticScheduler interface {
 	ScheduleBackup(schedule, path string, os ...restic.Option) error
+	Run()
+	Shutdown()
 }

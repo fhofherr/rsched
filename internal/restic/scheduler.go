@@ -2,6 +2,7 @@ package restic
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"sync"
@@ -40,9 +41,20 @@ type Scheduler struct {
 func (s *Scheduler) ScheduleBackup(schedule, path string, os ...Option) error {
 	return s.scheduleFunc(schedule, func(ctx context.Context) {
 		if err := s.BackupFunc(ctx, path, os...); err != nil {
+			var rErr Error
+
 			log.Printf("Error during backup: %v", err)
+			if errors.As(err, &rErr) && len(rErr.Stderr) > 0 {
+				log.Printf("Restic stderr: %s", string(rErr.Stderr))
+			}
 		}
 	})
+}
+
+// Run starts the Scheduler in the calling go routine.
+func (s *Scheduler) Run() {
+	s.init()
+	s.cron.Run()
 }
 
 // Shutdown performs a graceful shutdown of the Scheduler.
@@ -56,6 +68,7 @@ func (s *Scheduler) Shutdown() {
 	s.init() // Call init to ensure s.shutdown exists even if nothing was scheduled
 
 	close(s.shutdown)
+	s.cron.Stop()
 
 	// Wait for all jobs to finish by acquiring the semaphore. This only works
 	// as long as the semaphore can be acquired only once. Should this change
@@ -84,6 +97,10 @@ func (s *Scheduler) init() {
 		// one job running at any time.
 		s.sempaphore = make(chan struct{}, 1)
 		s.cron = cron.New()
+
+		if s.BackupFunc == nil {
+			s.BackupFunc = Backup
+		}
 	})
 }
 

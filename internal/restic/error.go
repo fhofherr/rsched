@@ -3,24 +3,28 @@ package restic
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 // Error represents an error that occurred while interacting with restic.
 type Error struct {
 	Command  string
 	ExitCode int
-
-	// Set err to transport the error that lead to Error. This is mainly for
-	// logging and debugging purposes. Values that are provided by the error
-	// and have a corresponding Field in this struct need to be set.
-	Err error
+	Stderr   string
 }
 
 func (e Error) Error() string {
-	if e.Err != nil {
-		return fmt.Sprintf("restic %s: %v", e.Command, e.Err)
+	var sb strings.Builder
+
+	fmt.Fprint(&sb, "restic")
+	if e.Command != "" {
+		fmt.Fprintf(&sb, " %s", e.Command)
 	}
-	return fmt.Sprintf("restic %s: %d", e.Command, e.ExitCode)
+	if e.ExitCode > 0 {
+		fmt.Fprintf(&sb, ": exit code: %d", e.ExitCode)
+	}
+
+	return sb.String()
 }
 
 func asError(err error) (Error, bool) {

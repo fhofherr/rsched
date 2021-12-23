@@ -93,3 +93,10 @@ func WithCmdRunner(r CmdRunner) Option {
 		opts.Runner = r
 	}
 }
+
+// WithBinary allows to override the restic binary called.
+func WithBinary(path string) Option {
+	return func(opts *options) {
+		opts.Restic = path
+	}
+}
