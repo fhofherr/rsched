@@ -48,9 +48,9 @@ $(BIN_DIR)/rsched: $(BIN_DIR)/rsched_$(RSCHED_VERSION)_$(LOCAL_GOOS)_$(LOCAL_GOA
 
 $(BIN_DIR)/rsched_$(RSCHED_VERSION)_%: GOOS=$(word 1,$(subst _, ,$*))
 $(BIN_DIR)/rsched_$(RSCHED_VERSION)_%: GOARCH=$(word 2,$(subst _, ,$*))
-$(BIN_DIR)/rsched_$(RSCHED_VERSION)_%: LDFLAGS=-s -X '$(MOD_NAME)/internal/cmd.Version=$(RSCHED_VERSION)' -X $(MOD_NAME)/internal/cmd.GitHash=$(RSCHED_GIT_HASH)
+$(BIN_DIR)/rsched_$(RSCHED_VERSION)_%: LDFLAGS=-extldflags=-static -X '$(MOD_NAME)/internal/cmd.Version=$(RSCHED_VERSION)' -X $(MOD_NAME)/internal/cmd.GitHash=$(RSCHED_GIT_HASH)
 $(BIN_DIR)/rsched_$(RSCHED_VERSION)_%: $(GO_FILES)
-	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO) build -ldflags="$(LDFLAGS)" -o $@ .
+	CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO) build -ldflags="$(LDFLAGS)" -o $@ .
 
 .PHONY: test
 test: $(COVERAGE_FILE) ## Run all rsched tests
@@ -74,7 +74,9 @@ $(COVERAGE_FILE): $(GO_FILES) $(BIN_DIR)/restic
 # Restic download
 # ----------------------------------------------------------------------------
 RESTIC_VERSION ?= 0.12.1
-RESTIC_KEY := restic.pub.asc
+RESTIC_BINARIES := \
+	restic_$(RESTIC_VERSION)_linux_amd64 \
+	restic_$(RESTIC_VERSION)_linux_arm64
 
 $(BIN_DIR)/restic: $(BIN_DIR)/restic_$(RESTIC_VERSION)_$(LOCAL_GOOS)_$(LOCAL_GOARCH)
 	ln $< $@
@@ -96,7 +98,28 @@ $(CACHE_DIR)/restic/SHA256SUMS:
 # ----------------------------------------------------------------------------
 # Container
 # ----------------------------------------------------------------------------
-PODMAN ?= podman
+DOCKER ?= docker
+IMAGE_TAG ?= ghcr.io/fhofherr/rsched:$(RSCHED_VERSION)
+
+IMAGE_ARCHS := amd64 arm64
+IMAGE_PLATFORMS := $(addprefix --platform linux/,$(IMAGE_ARCHS))
+IMAGE_RSCHED_BINARIES := $(addprefix rsched_$(RSCHED_VERSION)_linux_, $(IMAGE_ARCHS))
+IMAGE_RESTIC_BINARIES := $(addprefix restic_$(RESTIC_VERSION)_linux_, $(IMAGE_ARCHS))
+
+# TODO uncomment line below once ready to push the first image for real
+# IMAGE_PUSH := --push
+
+# See: https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/
+
+.PHONY: image
+image: $(addprefix $(BIN_DIR)/, $(IMAGE_RSCHED_BINARIES)) $(addprefix $(BIN_DIR)/,$(IMAGE_RESTIC_BINARIES))
+	$(DOCKER) buildx build \
+		--build-arg RESTIC_VERSION=$(RESTIC_VERSION) \
+		--build-arg RSCHED_VERSION=$(RSCHED_VERSION) \
+		--tag $(IMAGE_TAG) \
+		$(IMAGE_PUSH) \
+		$(IMAGE_PLATFORMS) \
+		.
 
 # ----------------------------------------------------------------------------
 # Cleanup
