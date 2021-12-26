@@ -101,7 +101,8 @@ $(CACHE_DIR)/restic/SHA256SUMS:
 DOCKER ?= docker
 IMAGE_TAG ?= ghcr.io/fhofherr/rsched:$(RSCHED_VERSION)
 
-IMAGE_ARCHS := amd64 arm64
+# IMAGE_ARCHS := amd64 arm64
+IMAGE_ARCHS := amd64
 IMAGE_PLATFORMS := $(addprefix --platform linux/,$(IMAGE_ARCHS))
 IMAGE_RSCHED_BINARIES := $(addprefix rsched_$(RSCHED_VERSION)_linux_, $(IMAGE_ARCHS))
 IMAGE_RESTIC_BINARIES := $(addprefix restic_$(RESTIC_VERSION)_linux_, $(IMAGE_ARCHS))
