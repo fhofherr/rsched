@@ -29,7 +29,7 @@ LOCAL_GOARCH := $(shell $(GO) env GOARCH)
 
 # Only a semantic version if executed on the tagged commit. But this is good
 # enough for us.
-RSCHED_VERSION ?= $(shell $(GIT) describe --tags --match 'v*')
+RSCHED_VERSION ?= $(shell $(GIT) describe)
 RSCHED_GIT_HASH ?= $(shell $(GIT) rev-parse --verify HEAD)
 
 RSCHED_BINARIES := \
