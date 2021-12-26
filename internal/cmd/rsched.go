@@ -15,6 +15,7 @@ type RSched struct {
 func (r *RSched) Run(cfg Config) {
 	env := Environ()
 
+	log.Printf("Rsched version %s", Version)
 	if cfg.ResticRepository != "" && env[restic.EnvResticRepository] == "" {
 		env[restic.EnvResticRepository] = cfg.ResticRepository
 	}

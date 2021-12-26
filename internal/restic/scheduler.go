@@ -40,6 +40,7 @@ type Scheduler struct {
 // See the documentation of the Scheduler type for the definition of schedule.
 func (s *Scheduler) ScheduleBackup(schedule, path string, os ...Option) error {
 	return s.scheduleFunc(schedule, func(ctx context.Context) {
+		log.Println("Beginning backup")
 		if err := s.BackupFunc(ctx, path, os...); err != nil {
 			var rErr Error
 
@@ -47,7 +48,9 @@ func (s *Scheduler) ScheduleBackup(schedule, path string, os ...Option) error {
 			if errors.As(err, &rErr) && len(rErr.Stderr) > 0 {
 				log.Printf("Restic stderr: %s", string(rErr.Stderr))
 			}
+			return
 		}
+		log.Println("Backup successfully completed")
 	})
 }
 
@@ -79,6 +82,7 @@ func (s *Scheduler) Shutdown() {
 func (s *Scheduler) scheduleFunc(schedule string, f func(context.Context)) error {
 	s.init()
 
+	log.Printf("Adding job with schedule %q", schedule)
 	job := s.newJob(f)
 	if schedule == ScheduleOnce {
 		go job()
