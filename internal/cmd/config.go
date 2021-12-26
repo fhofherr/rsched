@@ -10,6 +10,7 @@ import (
 // Config contains the configuration for the rsched command. The individual
 // values can be either set using command line flags or environment variables.
 type Config struct {
+	PrintVersion       bool
 	BackupPath         string
 	BackupSchedule     string
 	ResticPasswordFile string
@@ -22,6 +23,7 @@ func LoadConfig(args []string) (Config, error) {
 	var cfg Config
 
 	fs := flag.NewFlagSet("rsched", flag.ContinueOnError)
+	fs.BoolVar(&cfg.PrintVersion, "v", false, "Print version and exit")
 	fs.StringVar(&cfg.BackupSchedule, "backup-schedule", "@hourly", "Interval in which backups should be taken.")
 	fs.StringVar(&cfg.BackupPath, "restic-backup-path", "/", "Directory to backup.")
 	fs.StringVar(

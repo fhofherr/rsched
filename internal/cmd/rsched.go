@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/fhofherr/rsched/internal/restic"
@@ -14,6 +15,10 @@ type RSched struct {
 // Run executes rsched based on the passed config.
 func (r *RSched) Run(cfg Config) {
 	env := Environ()
+	if cfg.PrintVersion {
+		fmt.Printf("%s - %s\n", Version, GitHash)
+		return
+	}
 
 	log.Printf("Rsched version %s", Version)
 	if cfg.ResticRepository != "" && env[restic.EnvResticRepository] == "" {

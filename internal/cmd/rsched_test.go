@@ -20,6 +20,12 @@ func TestRSched_Run(t *testing.T) {
 
 	tests := []testCase{
 		{
+			name: "print version",
+			cfg: cmd.Config{
+				PrintVersion: true,
+			},
+		},
+		{
 			name: "backup only",
 			cfg: cmd.Config{
 				BackupPath:         "/",

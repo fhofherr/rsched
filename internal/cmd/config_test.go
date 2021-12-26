@@ -27,6 +27,13 @@ func TestLoadConfig(t *testing.T) {
 			},
 		},
 		{
+			name: "Print version",
+			args: []string{"-v"},
+			assertCfg: func(t *testing.T, actual cmd.Config) {
+				assert.True(t, actual.PrintVersion)
+			},
+		},
+		{
 			name: "Pass backup path",
 			args: []string{"-restic-backup-path", "/path/to/backup"},
 			assertCfg: func(t *testing.T, actual cmd.Config) {

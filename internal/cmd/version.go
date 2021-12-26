@@ -2,7 +2,7 @@ package cmd
 
 // Versioning information. Set to its actual value during linking.
 // See Makefile.
-const (
+var (
 	Version = "dev"
 	GitHash = "dev"
 )

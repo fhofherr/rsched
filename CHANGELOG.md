@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Environment variables used to configure `rsched` now need to be
   prefixed with `RSCHED_` instead of `RSCHED__`.
 * Docker image is now based on Alpine Linux.
+* Fix injecting version information into binaries.
 
 ## [0.1.0-alpha.2] - 2021-12-26
 
