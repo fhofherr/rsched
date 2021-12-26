@@ -48,7 +48,7 @@ variable is set.
 
 	fs.StringVar(&cfg.ResticBinary, "restic-binary", "", "Path to the restic binary")
 
-	err := ff.Parse(fs, args, ff.WithEnvVarPrefix("RSCHED_"))
+	err := ff.Parse(fs, args, ff.WithEnvVarPrefix("RSCHED"))
 	if err != nil {
 		return cfg, fmt.Errorf("parse config: %v", err)
 	}
