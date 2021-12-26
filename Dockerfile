@@ -1,4 +1,4 @@
-FROM scratch
+FROM alpine:3.15.0
 LABEL org.opencontainers.image.source https://github.com/fhofherr/rsched
 
 ARG RSCHED_VERSION
