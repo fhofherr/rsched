@@ -107,17 +107,16 @@ IMAGE_PLATFORMS := $(addprefix --platform linux/,$(IMAGE_ARCHS))
 IMAGE_RSCHED_BINARIES := $(addprefix rsched_$(RSCHED_VERSION)_linux_, $(IMAGE_ARCHS))
 IMAGE_RESTIC_BINARIES := $(addprefix restic_$(RESTIC_VERSION)_linux_, $(IMAGE_ARCHS))
 
-IMAGE_PUSH ?= --push
+IMAGE_PUSH ?=
 
 # See: https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/
-
 .PHONY: image
-image: $(addprefix $(BIN_DIR)/, $(IMAGE_RSCHED_BINARIES)) $(addprefix $(BIN_DIR)/,$(IMAGE_RESTIC_BINARIES))
+image: $(addprefix $(BIN_DIR)/, $(IMAGE_RSCHED_BINARIES)) $(addprefix $(BIN_DIR)/,$(IMAGE_RESTIC_BINARIES)) ## Build the docker images
 	$(DOCKER) buildx build \
 		--build-arg RESTIC_VERSION=$(RESTIC_VERSION) \
 		--build-arg RSCHED_VERSION=$(RSCHED_VERSION) \
 		--tag $(IMAGE_TAG) \
-		$(IMAGE_PUSH) \
+		$(if $(IMAGE_PUSH),--push,--load) \
 		$(IMAGE_PLATFORMS) \
 		.
 
