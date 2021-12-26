@@ -107,8 +107,7 @@ IMAGE_PLATFORMS := $(addprefix --platform linux/,$(IMAGE_ARCHS))
 IMAGE_RSCHED_BINARIES := $(addprefix rsched_$(RSCHED_VERSION)_linux_, $(IMAGE_ARCHS))
 IMAGE_RESTIC_BINARIES := $(addprefix restic_$(RESTIC_VERSION)_linux_, $(IMAGE_ARCHS))
 
-# TODO uncomment line below once ready to push the first image for real
-# IMAGE_PUSH := --push
+IMAGE_PUSH ?= --push
 
 # See: https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/
 
