@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   prefixed with `RSCHED_` instead of `RSCHED__`.
 * Docker image is now based on Alpine Linux.
 * Fix injecting version information into binaries.
+* Copy `restic` and `rsched` binaries to `/usr/local/bin` when creating
+  image.
 
 ## [0.1.0-alpha.2] - 2021-12-26
 
