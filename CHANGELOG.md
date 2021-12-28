@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0-alpha.3] - 2021-12-28
+
 ### Changed
 
 * Environment variables used to configure `rsched` now need to be
@@ -30,7 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   docker images. Currently only `linux/amd64` is supported.
   `linux/arm64` will be supported once I have the ability to test it.
 
-[Unreleased]: https://github.com/fhofherr/rsched/compare/v0.1.0-alpha.2...HEAD
+[Unreleased]: https://github.com/fhofherr/rsched/compare/v0.1.0-alpha.3...HEAD
+[0.1.0-alpha.3]: https://github.com/fhofherr/rsched/compare/v0.1.0-alpha.2...v0.1.0-alpha.3
 [0.1.0-alpha.2]: https://github.com/fhofherr/rsched/compare/v0.1.0-alpha.1...v0.1.0-alpha.2
 [0.1.0-alpha.1]: https://github.com/fhofherr/rsched/compare/v0.0.0...v0.1.0-alpha.1
 [0.0.0]: https://github.com/fhofherr/rsched/releases/tag/v0.0.0
