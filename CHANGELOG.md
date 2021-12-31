@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+* Binaries are built with linker flag `-s`. This creates a smaller
+  binary.
+
 ## [0.1.0-alpha.3] - 2021-12-28
 
 ### Changed

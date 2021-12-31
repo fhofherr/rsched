@@ -48,7 +48,7 @@ $(BIN_DIR)/rsched: $(BIN_DIR)/rsched_$(RSCHED_VERSION)_$(LOCAL_GOOS)_$(LOCAL_GOA
 
 $(BIN_DIR)/rsched_$(RSCHED_VERSION)_%: GOOS=$(word 1,$(subst _, ,$*))
 $(BIN_DIR)/rsched_$(RSCHED_VERSION)_%: GOARCH=$(word 2,$(subst _, ,$*))
-$(BIN_DIR)/rsched_$(RSCHED_VERSION)_%: LDFLAGS=-extldflags=-static -X '$(MOD_NAME)/internal/cmd.Version=$(RSCHED_VERSION)' -X '$(MOD_NAME)/internal/cmd.GitHash=$(RSCHED_GIT_HASH)'
+$(BIN_DIR)/rsched_$(RSCHED_VERSION)_%: LDFLAGS=-s -extldflags=-static -X '$(MOD_NAME)/internal/cmd.Version=$(RSCHED_VERSION)' -X '$(MOD_NAME)/internal/cmd.GitHash=$(RSCHED_GIT_HASH)'
 $(BIN_DIR)/rsched_$(RSCHED_VERSION)_%: $(GO_FILES)
 	CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO) build -ldflags="$(LDFLAGS)" -o $@ .
 
