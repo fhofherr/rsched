@@ -3,7 +3,7 @@ module github.com/fhofherr/rsched
 go 1.17
 
 require (
-	github.com/google/go-cmp v0.5.6
+	github.com/google/go-cmp v0.5.7
 	github.com/peterbourgon/ff/v3 v3.1.2
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/stretchr/testify v1.7.0
