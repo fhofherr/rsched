@@ -1,5 +1,22 @@
 {
   "extends": [
     "config:base"
+  ],
+  "enabledManagers": [
+    "dockerfile",
+    "gomod",
+    "pre-commit",
+    "regex"
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": [
+        "^Makefile$",
+      ],
+      "matchStrings": [
+        "renovate:\\s+datasource=(?<datasource>.*)\\s+depname=(?<depName>.*)(\\s+versioning=(?<versioning>.*))?\\s+.*\\s*\\?=\\s*(?<currentValue>.*)"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    }
   ]
 }

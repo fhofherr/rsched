@@ -1,6 +1,7 @@
 GO ?= go
 CURL ?= curl
 BZIP2 ?= bzip2
+UNZIP ?= unzip
 GPG ?= gpg2
 SHA256SUM ?= sha256sum
 GIT ?= git
@@ -73,6 +74,7 @@ $(COVERAGE_FILE): $(GO_FILES) $(BIN_DIR)/restic
 # ----------------------------------------------------------------------------
 # Restic download
 # ----------------------------------------------------------------------------
+# renovate: datasource=github depname=restic/restic
 RESTIC_VERSION ?= 0.12.1
 RESTIC_BINARIES := \
 	restic_$(RESTIC_VERSION)_linux_amd64 \
@@ -94,6 +96,29 @@ $(CACHE_DIR)/restic/restic_$(RESTIC_VERSION)_%.bz2: $(CACHE_DIR)/restic/SHA256SU
 $(CACHE_DIR)/restic/SHA256SUMS:
 	mkdir -p $(dir $@)
 	$(CURL) -fsSL https://github.com/restic/restic/releases/download/v$(RESTIC_VERSION)/SHA256SUMS -o $@
+
+# ----------------------------------------------------------------------------
+# Rclone download
+# ----------------------------------------------------------------------------
+# renovate: datasource=github depname=rclone/rclone
+RCLONE_VERSION ?= 1.57.0
+
+$(BIN_DIR)/rclone: $(BIN_DIR)/rclone-v$(RCLONE_VERSION)-$(LOCAL_GOOS)-$(LOCAL_GOARCH)
+	ln $< $@
+
+$(BIN_DIR)/rclone-v$(RCLONE_VERSION)-%: $(CACHE_DIR)/rclone/rclone-v$(RCLONE_VERSION)-%.zip
+	$(UNZIP) -od $(dir $<) $<
+	mkdir -p $(dir $@)
+	cp $(basename $<)/rclone $@
+
+$(CACHE_DIR)/rclone/rclone-v$(RCLONE_VERSION)-%.zip: $(CACHE_DIR)/rclone/SHA256SUMS
+	mkdir -p $(dir $@)
+	$(CURL) -fsSL https://github.com/rclone/rclone/releases/download/v$(RCLONE_VERSION)/rclone-v$(RCLONE_VERSION)-$*.zip -o $@
+	cd $(dir $@); $(SHA256SUM) --check --ignore-missing $(notdir $<)
+
+$(CACHE_DIR)/rclone/SHA256SUMS:
+	mkdir -p $(dir $@)
+	$(CURL) -fsSL https://github.com/rclone/rclone/releases/download/v$(RCLONE_VERSION)/SHA256SUMS -o $@
 
 # ----------------------------------------------------------------------------
 # Container
