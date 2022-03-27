@@ -11,7 +11,7 @@
   "regexManagers": [
     {
       "fileMatch": [
-        "^Makefile$",
+        "^Makefile$"
       ],
       "matchStrings": [
         "renovate:\\s+datasource=(?<datasource>.*)\\s+depname=(?<depName>.*)(\\s+versioning=(?<versioning>.*))?\\s+.*\\s*\\?=\\s*(?<currentValue>.*)"

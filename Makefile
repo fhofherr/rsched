@@ -74,7 +74,7 @@ $(COVERAGE_FILE): $(GO_FILES) $(BIN_DIR)/restic
 # ----------------------------------------------------------------------------
 # Restic download
 # ----------------------------------------------------------------------------
-# renovate: datasource=github depname=restic/restic
+# renovate: datasource=github-releases depname=restic/restic
 RESTIC_VERSION ?= 0.12.1
 RESTIC_BINARIES := \
 	restic_$(RESTIC_VERSION)_linux_amd64 \
@@ -100,7 +100,7 @@ $(CACHE_DIR)/restic/SHA256SUMS:
 # ----------------------------------------------------------------------------
 # Rclone download
 # ----------------------------------------------------------------------------
-# renovate: datasource=github depname=rclone/rclone
+# renovate: datasource=github-releases depname=rclone/rclone
 RCLONE_VERSION ?= 1.57.0
 
 $(BIN_DIR)/rclone: $(BIN_DIR)/rclone-v$(RCLONE_VERSION)-$(LOCAL_GOOS)-$(LOCAL_GOARCH)
