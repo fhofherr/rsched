@@ -75,7 +75,7 @@ $(COVERAGE_FILE): $(GO_FILES) $(BIN_DIR)/restic
 # Restic download
 # ----------------------------------------------------------------------------
 # renovate: datasource=github-releases depname=restic/restic
-RESTIC_VERSION ?= 0.12.1
+RESTIC_VERSION ?= v0.13.0
 RESTIC_BINARIES := \
 	restic_$(RESTIC_VERSION)_linux_amd64 \
 	restic_$(RESTIC_VERSION)_linux_arm64
