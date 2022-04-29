@@ -101,7 +101,7 @@ $(CACHE_DIR)/restic/SHA256SUMS:
 # Rclone download
 # ----------------------------------------------------------------------------
 # renovate: datasource=github-releases depname=rclone/rclone
-RCLONE_VERSION ?= v1.58.0
+RCLONE_VERSION ?= v1.58.1
 
 $(BIN_DIR)/rclone: $(BIN_DIR)/rclone-v$(RCLONE_VERSION)-$(LOCAL_GOOS)-$(LOCAL_GOARCH)
 	ln $< $@
